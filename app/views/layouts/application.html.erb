@@ -7,27 +7,57 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-
   <body>
     
-    <% flash.each do |name, msg| %>
-      <%= content_tag(:div, msg, class: "alert alert-#{name}") %>
-    <% end %>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <%= link_to 'Raddit', root_path, class: "navbar-brand" %>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            
+          <% if user_signed_in? %>
+            <li><%= link_to 'Submit link', new_link_path, class: "nav-link" %></li>
+          <% end %>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          <% if user_signed_in? %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                User
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <%= link_to 'Edit Account ', edit_user_registration_path, class: "dropdown-item" %>
+                <div class="dropdown-divider"></div>
+                <%= link_to 'Sign out', destroy_user_session_path, :method => :delete, class: "dropdown-item" %>
+              </div>
+            </li>
+          <% else %>  
+            <li><%= link_to 'Sign up', new_user_registration_path, class: "nav-link" %></li>
+            <li><%= link_to 'Sign in', new_user_session_path, class: "nav-link" %></li>
+          <% end %>
+        </ul>
+      </div>
+    </nav>
     
-    <% if user_signed_in? %>
-      <ul>
-        <li><%= link_to 'Submit link', new_link_path %></li>
-        <li><%= link_to 'Account ', edit_user_registration_path %></li>
-        <li><%= link_to 'Sign out', destroy_user_session_path, :method => :delete %></li>
-      </ul>
+
+    
+
+    
+    
+    <div id ="main_content" class="container">
+    
+      <% flash.each do |name, msg| %>
+        <%= content_tag(:div, msg, class: "alert alert-#{name}") %>
+      <% end %>
       
-    <% else %>  
-      <ul>
-        <li><%= link_to 'Sign up', new_user_registration_path %></li>
-        <li><%= link_to 'Sign in', new_user_session_path %></li>
-      </ul>
-    <% end %>
+  
+      <div id="container">
+        <%= yield %>
+      </div>
     
-    <%= yield %>
+    </div>
+    
   </body>
 </html>
